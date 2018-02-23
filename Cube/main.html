@@ -1,0 +1,86 @@
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+	<style>
+		/* We want our scene to span the entire window */
+		body { margin: 0; }
+	</style>
+</heda>
+<body>
+	
+	<script id="fragShader" type="shader-code">
+		uniform vec2 resolution;//Uniform variables must be declared here first
+		uniform float time;
+		uniform sampler2D texture;
+		void main() {
+			vec2 xy = gl_FragCoord.xy / resolution.xy;
+
+			// Gray scale over time
+		    vec4 rgb = texture2D(texture, xy);
+		    float grayFactor = (rgb.r + rgb.g + rgb.b) / 3.0;
+		  	vec4 gray = vec4(vec3(grayFactor),1.0);
+
+		  	float factor = 1.0 - abs(cos(3.1415*time*2.0));
+		  	vec4 pixelColor = rgb*factor + gray*(1.0 - factor);
+			gl_FragColor = pixelColor;
+		}
+	</script>
+
+	<script>
+		//@author Omar Shehata. 2015.
+		//@Edited Daniel Rodriguez. 2018.
+		//We are loading the Three.js library from the cdn here: http://cdnjs.com/libraries/three.js/
+		var scene;
+		var camera;
+		var renderer;
+
+		function scene_setup(){
+			//This is all code needed to set up a basic ThreeJS scene
+			//First we initialize the scene and our camera
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			//We create the WebGL renderer and add it to the document
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+		}
+		scene_setup();
+
+		//Add your code here!
+		var shaderCode = document.getElementById("fragShader").innerHTML;
+		
+		THREE.ImageUtils.crossOrigin = '';//Allows us to load an external image
+		var tex = THREE.ImageUtils.loadTexture( "https://tutsplus.github.io/Beginners-Guide-to-Shaders/Part2/SIPI_Jelly_Beans.jpg" );
+		
+		var uniforms = {};
+		uniforms.resolution = {type: 'v2', value: new THREE.Vector2(window.innerWidth, window.innerHeight)};
+		uniforms.time ={type: 'f', value: 0.0};
+		uniforms.texture = {type: 't', value:tex};
+
+		var globalTime = new Date().getTime();
+
+		//Create an object to apply the shaders to
+		var material = new THREE.ShaderMaterial({uniforms:uniforms, fragmentShader:shaderCode});
+		var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+		var sprite = new THREE.Mesh( geometry,material );
+		scene.add( sprite );
+		sprite.position.z = -3;//Move it back so we can see it
+
+		//Render everything!
+		function render() {
+			sprite.rotation.y += 0.02;
+
+			uniforms.resolution.value.x = window.innerWidth;
+		    uniforms.resolution.value.y = window.innerHeight;
+		    uniforms.time.value = new Date().getTime() - globalTime;
+		    
+		    //console.log(new Date().getTime() - globalTime);
+
+			requestAnimationFrame( render );
+			renderer.render( scene, camera );
+		}
+		render();
+
+	</script>
+</body>
+</html>

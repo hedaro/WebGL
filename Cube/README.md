@@ -1,0 +1,2 @@
+#Cube
+This project is a test for shaders, based on this [tutorial](https://gamedevelopment.tutsplus.com/tutorials/a-beginners-guide-to-coding-graphics-shaders-part-2--cms-24111) by [@OmarShehata](https://github.com/OmarShehata).

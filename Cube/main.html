@@ -20,7 +20,7 @@
 		    float grayFactor = (rgb.r + rgb.g + rgb.b) / 3.0;
 		  	vec4 gray = vec4(vec3(grayFactor),1.0);
 
-		  	float factor = 1.0 - abs(cos(3.1415*time*2.0));
+		  	float factor = 1.0 - abs(cos(3.1415*time));
 		  	vec4 pixelColor = rgb*factor + gray*(1.0 - factor);
 			gl_FragColor = pixelColor;
 		}

@@ -1,0 +1,2 @@
+# Lighting
+This project is a test for lighting shaders, based on this [tutorial](https://gamedevelopment.tutsplus.com/tutorials/a-beginners-guide-to-coding-graphics-shaders-part-3--cms-24351) by @[OmarShehata](https://github.com/OmarShehata).

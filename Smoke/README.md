@@ -1,0 +1,2 @@
+# Smoke
+This project is a test for shaders, based on this [tutorial](https://gamedevelopment.tutsplus.com/tutorials/how-to-write-a-smoke-shader--cms-25587) by @[OmarShehata](https://github.com/OmarShehata).

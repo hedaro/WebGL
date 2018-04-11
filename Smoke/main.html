@@ -30,7 +30,19 @@
             vec4 upColor = texture2D(bufferTexture, vec2(pixel.x, pixel.y+yPixel));
             vec4 downColor = texture2D(bufferTexture, vec2(pixel.x, pixel.y-yPixel));
 
-            float factor = 14.0 * 0.016 * (leftColor.r + rightColor.r + upColor.r + downColor.r - 4.0 * gl_FragColor.r);
+            if (pixel.y <= yPixel) {
+                downColor.rgb = vec3(0.0);
+            }
+
+            float factor = 8.0 * 0.016 * 
+                (
+                    leftColor.r +
+                    rightColor.r +
+                    upColor.r + 
+                    downColor.r * 3.0 - 
+                    6.0 * gl_FragColor.r
+                );
+            
             float minimum = 0.003;
             if (factor >= -minimum && factor < 0.0) factor = -minimum;
             gl_FragColor.rgb += factor;
@@ -108,14 +120,11 @@
         document.onmousedown = function(event){
             //Update the light source to follow our mouse
             bufferMaterial.uniforms.smokeSource.value.z = 0.1;
-            console.log("mousedown");
-            console.log(bufferMaterial.uniforms.smokeSource.value);
         }
 
         document.onmouseup = function(event){
             //Update the light source to follow our mouse
             bufferMaterial.uniforms.smokeSource.value.z = 0.0;
-            console.log("mouseup");
         }
 
         //Render everything!
